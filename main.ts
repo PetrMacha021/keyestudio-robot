@@ -1,4 +1,4 @@
-let speed = 25;
+let speed = 20;
 radio.setGroup(69)
 
 function forward() {
@@ -30,17 +30,31 @@ function left() {
 }
 
 function upright() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Back, speed);
+    mecanumRobot.Motor(LR.Upper_left, MD.Forward, speed);
+    mecanumRobot.Motor(LR.Lower_right, MD.Forward, speed);
+    mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0);
+    mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0);
 }
 
 function upleft() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
+    mecanumRobot.Motor(LR.Upper_right, MD.Forward, speed);
+    mecanumRobot.Motor(LR.Lower_left, MD.Forward, speed);
+    mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0);
+    mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0);
+}
+
+function downright() {
     mecanumRobot.Motor(LR.Upper_right, MD.Back, speed);
     mecanumRobot.Motor(LR.Lower_left, MD.Back, speed);
+    mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0);
+    mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0);
+}
+
+function downleft() {
+    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
     mecanumRobot.Motor(LR.Lower_right, MD.Back, speed);
+    mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0);
+    mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0);
 }
 
 function stop() {
@@ -50,9 +64,8 @@ function stop() {
     mecanumRobot.Motor(LR.Lower_right, MD.Back, 0);
 }
 
-upright();
-/*
 radio.onReceivedString(function(receivedString: string) {
+    console.log(speed);
     switch(receivedString) {
         case "U":
             forward();
@@ -73,8 +86,16 @@ radio.onReceivedString(function(receivedString: string) {
             upleft();
             break;
         case "DR":
+            downright();
             break;
         case "DL":
+            downleft();
+            break;
+        case "A":
+            speed -= 10;
+            break;
+        case "B":
+            speed += 10;
             break;
         case "NIC":
             stop();
@@ -82,4 +103,4 @@ radio.onReceivedString(function(receivedString: string) {
         default:
             break;
     }
-});*/
+});
