@@ -1,106 +1,47 @@
-let speed = 20;
-radio.setGroup(69)
-
-function forward() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Forward, speed);
-}
-
-function backward() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Upper_right, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Back, speed);
-}
-
-function right() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Upper_right, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Forward, speed);
-}
-
-function left() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Back, speed);
-}
-
-function upright() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0);
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0);
-}
-
-function upleft() {
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, speed);
-    mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0);
-    mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0);
-}
-
-function downright() {
-    mecanumRobot.Motor(LR.Upper_right, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0);
-    mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0);
-}
-
-function downleft() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_right, MD.Back, speed);
-    mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0);
-    mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0);
-}
-
-function stop() {
-    mecanumRobot.Motor(LR.Upper_left, MD.Back, 0);
-    mecanumRobot.Motor(LR.Upper_right, MD.Back, 0);
-    mecanumRobot.Motor(LR.Lower_left, MD.Back, 0);
-    mecanumRobot.Motor(LR.Lower_right, MD.Back, 0);
-}
-
-radio.onReceivedString(function(receivedString: string) {
-    console.log(speed);
-    switch(receivedString) {
-        case "U":
-            forward();
-            break;
-        case "D":
-            backward();
-            break;
-        case "L":
-            left();
-            break;
-        case "R":
-            right();
-            break;
-        case "UR":
-            upright();
-            break;
-        case "UL":
-            upleft();
-            break;
-        case "DR":
-            downright();
-            break;
-        case "DL":
-            downleft();
-            break;
-        case "A":
-            speed -= 10;
-            break;
-        case "B":
-            speed += 10;
-            break;
-        case "NIC":
-            stop();
-            break;
-        default:
-            break;
+radio.setGroup(727)
+let speedX = 0
+let speedY = 0
+radio.onReceivedValue(function on_received_value(name: string, value: number) {
+    
+    if (name == "X") {
+        speedX = Math.max(-100, Math.min((value - 512) / 5, 100))
+        if (speedX > 7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Forward, speedX)
+            mecanumRobot.Motor(LR.Upper_right, MD.Back, speedX)
+            mecanumRobot.Motor(LR.Lower_left, MD.Back, speedX)
+            mecanumRobot.Motor(LR.Lower_right, MD.Forward, speedX)
+        } else if (speedX < -7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Back, speedX * -1)
+            mecanumRobot.Motor(LR.Upper_right, MD.Forward, speedX * -1)
+            mecanumRobot.Motor(LR.Lower_left, MD.Forward, speedX * -1)
+            mecanumRobot.Motor(LR.Lower_right, MD.Back, speedX * -1)
+        } else if (speedY < 7 && speedY > -7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0)
+        }
+        
+    } else if (name == "Y") {
+        speedY = Math.max(-100, Math.min((value - 512) / 5, 100))
+        if (speedY > 7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Forward, speedY)
+            mecanumRobot.Motor(LR.Upper_right, MD.Forward, speedY)
+            mecanumRobot.Motor(LR.Lower_left, MD.Forward, speedY)
+            mecanumRobot.Motor(LR.Lower_right, MD.Forward, speedY)
+        } else if (speedY < -7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Back, speedY * -1)
+            mecanumRobot.Motor(LR.Upper_right, MD.Back, speedY * -1)
+            mecanumRobot.Motor(LR.Lower_left, MD.Back, speedY * -1)
+            mecanumRobot.Motor(LR.Lower_right, MD.Back, speedY * -1)
+        } else if (speedX < 7 && speedX > -7) {
+            mecanumRobot.Motor(LR.Upper_left, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Upper_right, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Lower_left, MD.Forward, 0)
+            mecanumRobot.Motor(LR.Lower_right, MD.Forward, 0)
+        }
+        
     }
-});
+    
+    console.log("X" + ("" + speedX) + " Y" + ("" + speedY))
+})
